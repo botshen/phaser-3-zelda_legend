@@ -3,6 +3,7 @@ import { Position } from '../../common/types';
 import { PLAYER_ANIMATION_KEYS } from '../../common/assets';
 import { InputComponent } from '../../components/input/input-component';
 import { ControlsComponent } from '../../components/game-object/controls-component';
+import { isArcadePhysicsBody } from '../../common/utils';
 
 export type PlayerConfig = {
   scene: Phaser.Scene;
@@ -42,6 +43,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
         true,
       );
+      this.#updateVelocity(false, -1);
     } else if (controls.isDownDown) {
       this.play(
         {
@@ -50,6 +52,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
         true,
       );
+      this.#updateVelocity(false, 1);
+    } else {
+      this.#updateVelocity(false, 0);
     }
 
     if (controls.isLeftDown) {
@@ -61,6 +66,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
         true,
       );
+      this.#updateVelocity(true, -1);
     } else if (controls.isRightDown) {
       this.setFlipX(false);
 
@@ -70,6 +76,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
         true,
       );
+      this.#updateVelocity(true, 1);
+    } else {
+      this.#updateVelocity(true, 0);
     }
+  }
+
+  #updateVelocity(isX: boolean, value: number): void {
+    if (!isArcadePhysicsBody(this.body)) {
+      return;
+    }
+    if (isX) {
+      this.body.velocity.x = value * 80;
+      return;
+    }
+    this.body.velocity.y = value * 80;
   }
 }
