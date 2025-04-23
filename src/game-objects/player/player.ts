@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { Position } from '../../common/types';
 import { PLAYER_ANIMATION_KEYS } from '../../common/assets';
 import { InputComponent } from '../../components/input/input-component';
+import { ControlsComponent } from '../../components/game-object/controls-component';
 
 export type PlayerConfig = {
   scene: Phaser.Scene;
@@ -12,14 +13,14 @@ export type PlayerConfig = {
 };
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  #controls: InputComponent;
+  #controlsComponent: ControlsComponent;
   constructor(config: PlayerConfig) {
     const { scene, position, assetKey, frame } = config;
     const { x, y } = position;
     super(scene, x, y, assetKey, frame || 0);
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.#controls = config.controls;
+    this.#controlsComponent = new ControlsComponent(this, config.controls);
     this.play({
       key: PLAYER_ANIMATION_KEYS.IDLE_DOWN,
       repeat: -1,
@@ -32,7 +33,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(): void {
-    if (this.#controls.isUpDown) {
+    const controls = this.#controlsComponent.controls;
+    if (controls.isUpDown) {
       this.play(
         {
           key: PLAYER_ANIMATION_KEYS.IDLE_UP,
@@ -40,7 +42,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
         true,
       );
-    } else if (this.#controls.isDownDown) {
+    } else if (controls.isDownDown) {
       this.play(
         {
           key: PLAYER_ANIMATION_KEYS.IDLE_DOWN,
@@ -50,7 +52,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       );
     }
 
-    if (this.#controls.isLeftDown) {
+    if (controls.isLeftDown) {
       this.setFlipX(true);
       this.play(
         {
@@ -59,7 +61,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
         true,
       );
-    } else if (this.#controls.isRightDown) {
+    } else if (controls.isRightDown) {
       this.setFlipX(false);
 
       this.play(
