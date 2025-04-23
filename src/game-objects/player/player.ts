@@ -38,7 +38,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (controls.isUpDown) {
       this.play(
         {
-          key: PLAYER_ANIMATION_KEYS.IDLE_UP,
+          key: PLAYER_ANIMATION_KEYS.WALK_UP,
           repeat: -1,
         },
         true,
@@ -47,7 +47,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     } else if (controls.isDownDown) {
       this.play(
         {
-          key: PLAYER_ANIMATION_KEYS.IDLE_DOWN,
+          key: PLAYER_ANIMATION_KEYS.WALK_DOWN,
           repeat: -1,
         },
         true,
@@ -61,7 +61,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.setFlipX(true);
       this.play(
         {
-          key: PLAYER_ANIMATION_KEYS.IDLE_SIDE,
+          key: PLAYER_ANIMATION_KEYS.WALK_SIDE,
           repeat: -1,
         },
         true,
@@ -72,7 +72,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
       this.play(
         {
-          key: PLAYER_ANIMATION_KEYS.IDLE_SIDE,
+          key: PLAYER_ANIMATION_KEYS.WALK_SIDE,
         },
         true,
       );
